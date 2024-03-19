@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Weight Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Fish Weight Prediction</h1>
+        <form id="fish-form">
+            <label for="length1">Length1:</label>
+            <input type="number" id="length1" name="length1" required><br>
+
+            <label for="length2">Length2:</label>
+            <input type="number" id="length2" name="length2" required><br>
+
+            <label for="length3">Length3:</label>
+            <input type="number" id="length3" name="length3" required><br>
+
+            <label for="height">Height:</label>
+            <input type="number" id="height" name="height" required><br>
+
+            <label for="width">Width:</label>
+            <input type="number" id="width" name="width" required><br>
+
+            <button type="submit">Predict Weight</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#fish-form').submit(function(event){
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '/predict',
+                    data: form_data,
+                    success: function(response){
+                        $('#result').html('<p>Predicted Weight: ' + response.weight.toFixed(2) + '</p>');
+                    },
+                    error: function(xhr, status, error){
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
